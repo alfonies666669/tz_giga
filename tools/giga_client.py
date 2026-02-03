@@ -68,3 +68,15 @@ def chat_completion(prompt: str, access_token: str) -> dict:
     )
     resp.raise_for_status()
     return resp.json()
+
+def chat_completion_raw(payload: dict, access_token: str) -> requests.Response:
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-Client-ID": "pytest-smoke",
+        "X-Request-ID": str(uuid.uuid4()),
+    }
+
+    resp = requests.post(CHAT_URL, headers=headers, json=payload, timeout=30, verify=False)
+    return resp

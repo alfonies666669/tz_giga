@@ -1,18 +1,10 @@
-import pytest
-
-from tools.giga_client import chat_completion, get_access_token
+from tools.giga_client import chat_completion
 
 
-@pytest.fixture(scope="session")
-def access_token():
-    try:
-        return get_access_token()
-    except Exception as e:
-        pytest.skip(f"GigaChat auth is not configured: {e}")
-
-
-def test_chat_completions_smoke(access_token):
+def test_positive_chat_completions_smoke(access_token):
+    """Проверяем что вообще что-то приходит"""
     response = chat_completion("Скажи 'привет' на 2 языках", access_token)
+
     assert "choices" in response
     assert isinstance(response["choices"], list)
     assert response["choices"], "choices пуст!"
@@ -23,3 +15,7 @@ def test_chat_completions_smoke(access_token):
 
     assert isinstance(content, str)
     assert content.strip(), "Пустой контент из модели!"
+
+    assert response.get("object") == "chat.completion"
+    assert isinstance(response.get("created"), int)
+    assert isinstance(response.get("model"), str)
