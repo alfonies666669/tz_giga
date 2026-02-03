@@ -1,6 +1,10 @@
+import allure
+
 from tools.giga_client import chat_completion_raw
 
 
+@allure.tag("positive")
+@allure.title("System-промпт первым в messages")
 def test_positive_chat_completions_with_system_prompt(access_token):
     """system первым, должно пройти без ошибок."""
     payload = {
@@ -31,6 +35,8 @@ def test_positive_chat_completions_with_system_prompt(access_token):
     assert content.strip(), "Пустой ответ при system-промпте"
 
 
+@allure.tag("positive")
+@allure.title("max_tokens ограничивает длину ответа")
 def test_positive_chat_completions_respects_max_tokens(access_token):
     """Проверяем, что max_tokens ограничивает длину ответа."""
     max_tokens = 10
@@ -54,11 +60,13 @@ def test_positive_chat_completions_respects_max_tokens(access_token):
     completion_tokens = usage.get("completion_tokens")
 
     assert completion_tokens is not None, "Нет completion_tokens в usage"
-    assert completion_tokens <= max_tokens, (
-        f"completion_tokens={completion_tokens} > max_tokens={max_tokens}"
-    )
+    assert (
+        completion_tokens <= max_tokens
+    ), f"completion_tokens={completion_tokens} > max_tokens={max_tokens}"
 
 
+@allure.tag("negative")
+@allure.title("Неверная model -> 404")
 def test_negative_chat_completions_invalid_model_returns_404(access_token):
     """Ломаем модель, ждём 404 и понятное сообщение."""
     payload = {
@@ -80,6 +88,8 @@ def test_negative_chat_completions_invalid_model_returns_404(access_token):
     assert "model" in body.get("message", "").lower()
 
 
+@allure.tag("negative")
+@allure.title("system не первым -> 422")
 def test_negative_chat_completions_system_prompt_not_first_returns_422(access_token):
     """system не первым, ждём 422 и текст про system message first."""
     payload = {

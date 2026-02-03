@@ -22,3 +22,15 @@ pip install requirements.txt
 ```bash
 pytest
 ```
+
+## CI + Allure (GitHub Actions)
+
+- В Actions использован workflow `.github/workflows/tests-allure.yml`.
+- Секрет с ключом GigaChat: `Settings → Secrets → Actions → GIGACHAT_AUTH_KEY`.
+
+Запуск:
+
+1. Зайти на вкладку **Actions** в репозитории.
+2. Выбрать workflow `tests-and-allure`.
+3. Нажать **Run workflow**.
+4. После окончания прогонки в разделе **Deployments → github-pages** будет ссылка на Allure-отчёт.

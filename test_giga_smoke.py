@@ -1,6 +1,10 @@
+import allure
+
 from tools.giga_client import chat_completion
 
 
+@allure.tag("positive", "smoke")
+@allure.title("Smoke: запрос к /chat/completions")
 def test_positive_chat_completions_smoke(access_token):
     """Проверяем что вообще что-то приходит"""
     response = chat_completion("Скажи 'привет' на 2 языках", access_token)
